@@ -1,4 +1,4 @@
-# Java7 Puppet Module
+# Oracle Java Puppet Module
 This module manages Oracle Java. It's a fork of https://github.com/softek/puppet-java7 with the following goals:
 
 * add support for java 6,7,...
