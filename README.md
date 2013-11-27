@@ -11,10 +11,11 @@ This module has been tested on Ubuntu 12.04.
 
 ### Usage
 
-    include java::java6
-    include java::java7
+  include oracle-java::java6
+  include oracle-java::java6-install-startcom-certs
 
 ### Author
+* Michael Wyraz <michael@wyraz.de>
 * Scott Smerchek <scott.smerchek@softekinc.com>
 
 ### Contributors:
