@@ -44,6 +44,31 @@ class oracle-java::java6-install-startcom-certs {
   }
 }
 
+class oracle-java::java7-install-startcom-certs {
+  require oracle-java::java7
+  
+  oracle-java::java-install-cert { "oracle-java7-startcom-certs.ca":
+    certName=> "startcom.ca",
+    jdkHome=>"/usr/lib/jvm/java-7-oracle"
+  }
+  oracle-java::java-install-cert { "oracle-java7-startcom-certs.class1":
+    certName=> "startcom.ca.sub.class1",
+    jdkHome=>"/usr/lib/jvm/java-7-oracle"
+  }
+  oracle-java::java-install-cert { "oracle-java7-startcom-certs.class2":
+    certName=> "startcom.ca.sub.class2",
+    jdkHome=>"/usr/lib/jvm/java-7-oracle"
+  }
+  oracle-java::java-install-cert { "oracle-java7-startcom-certs.class3":
+    certName=> "startcom.ca.sub.class3",
+    jdkHome=>"/usr/lib/jvm/java-7-oracle"
+  }
+  oracle-java::java-install-cert { "oracle-java7-startcom-certs.class4":
+    certName=> "startcom.ca.sub.class4",
+    jdkHome=>"/usr/lib/jvm/java-7-oracle"
+  }
+}
+
 define oracle-java::java-install-cert ($ensure=present,
                                        $certName,
                                        $jdkHome='${JAVA_HOME}',
@@ -78,16 +103,9 @@ define oracle-java::java-install-cert ($ensure=present,
 define oracle-java($javaVersion) {
   case $::operatingsystem {
     debian: {
-      include apt
+      include oracle-java::apt-ppa-webupd8team
+      include oracle-java::apt-preseed
       
-      apt::source { 'webupd8team': 
-        location          => "http://ppa.launchpad.net/webupd8team/java/ubuntu",
-        release           => "precise",
-        repos             => "main",
-        key               => "EEA14886",
-        key_server        => "keyserver.ubuntu.com",
-        include_src       => true
-      }
       package { "oracle-java${javaVersion}-installer":
         responsefile => '/tmp/java.preseed',
         require      => [
@@ -97,9 +115,9 @@ define oracle-java($javaVersion) {
       }
    }
    ubuntu: {
-     include apt
+      include oracle-java::apt-ppa-webupd8team
+      include oracle-java::apt-preseed
 
-      apt::ppa { 'ppa:webupd8team/java': }
       package { "oracle-java${javaVersion}-installer":
         responsefile => '/tmp/java.preseed',
         require      => [
@@ -111,6 +129,10 @@ define oracle-java($javaVersion) {
    default: { notice "Unsupported operatingsystem ${::operatingsystem}" }
   }
 
+}
+
+
+class oracle-java::apt-preseed {
   case $::operatingsystem {
     debian, ubuntu: {
       file { '/tmp/java.preseed':
@@ -122,3 +144,27 @@ define oracle-java($javaVersion) {
     default: { notice "Unsupported operatingsystem ${::operatingsystem}" }
   }
 }
+
+class oracle-java::apt-ppa-webupd8team {
+  case $::operatingsystem {
+    debian: {
+      include apt
+
+      apt::source { 'webupd8team':
+        location          => "http://ppa.launchpad.net/webupd8team/java/ubuntu",
+        release           => "precise",
+        repos             => "main",
+        key               => "EEA14886",
+        key_server        => "keyserver.ubuntu.com",
+        include_src       => true
+      }
+   }
+   ubuntu: {
+     include apt
+
+      apt::ppa { 'ppa:webupd8team/java': }
+   }
+   default: { notice "Unsupported operatingsystem ${::operatingsystem}" }
+  }
+}
+
