@@ -1,15 +1,18 @@
 # Java7 Puppet Module
-This module manages Oracle Java7.
+This module manages Oracle Java. It's a fork of https://github.com/softek/puppet-java7 with the following goals:
 
-This module has been tested against 3.0.1 on Ubuntu 12.04 and Debian 6.
+* add support for java 6,7,...
+* automatically import root CAs to java's keystore
+* set default java if more than one is installed
 
-Pull requests to add support for other operating systems are welcome.
+This module has been tested on Ubuntu 12.04.
 
 *NOTE:* This module may only be used if you agree to the Oracle license: http://www.oracle.com/technetwork/java/javase/terms/license/
 
 ### Usage
 
-    include java7
+    include java::java6
+    include java::java7
 
 ### Author
 * Scott Smerchek <scott.smerchek@softekinc.com>
